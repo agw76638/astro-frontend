@@ -50,10 +50,10 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta name="twitter:card" content="summary_large_image" />
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-28FX8C4PMN"></script>
-<script>
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-28FX8C4PMN"></script>
+<script is:inline>
   window.dataLayer = window.dataLayer || [];
-  function gtag(...args: unknown[]){window.dataLayer.push(args);}
+  function gtag(){window.dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'G-28FX8C4PMN');
