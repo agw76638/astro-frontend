@@ -2,6 +2,7 @@
 title: 'oh-my-opencode-slim, a lite agent orchestration plugin'
 description: 'review of oh-my-opencode slim'
 pubDate: 2026-09-16
+heroImage: '../../assets/bonsai-2026-09-16T11-46-32-499Z.webp'
 ---
 
 Hi this is my first post and I will talk about oh-my-opencode-slim. I was looking for a way to make a multi agent setup and found this plugin.
