@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -15,42 +14,98 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
+			.article-wrap {
+				width: min(var(--container), 100% - 3rem);
+				margin-inline: auto;
+				padding-top: var(--space-16);
+				padding-bottom: var(--space-8);
+			}
+			.back-link {
+				display: inline-block;
+				font-size: var(--text-sm);
+				text-decoration: none;
+				color: var(--muted);
+				margin-bottom: var(--space-8);
+			}
+			.back-link:hover {
+				color: var(--ink);
+				text-decoration: underline;
+				text-underline-offset: 3px;
 			}
 			.hero-image {
-				width: 100%;
+				margin-bottom: var(--space-8);
 			}
 			.hero-image img {
 				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
+				width: 100%;
+				border-radius: var(--radius-md);
+				border: 1px solid var(--line);
 			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
+			.post-title {
+				margin: 0 0 var(--space-2);
+				font-size: var(--text-2xl);
+				letter-spacing: -0.02em;
 			}
 			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+				margin: 0 0 var(--space-6);
+				color: var(--faint);
+				font-size: var(--text-sm);
 			}
 			.last-updated-on {
 				font-style: italic;
+			}
+			.lede {
+				margin: 0 0 var(--space-6);
+				padding-bottom: var(--space-6);
+				border-bottom: 1px solid var(--line);
+				color: var(--muted);
+				font-size: var(--text-base);
+			}
+			.prose {
+				color: var(--ink);
+				font-size: var(--text-base);
+			}
+			.prose :global(p) {
+				margin-block: var(--space-4);
+			}
+			.prose :global(h2) {
+				font-size: var(--text-xl);
+				margin-top: var(--space-12);
+				margin-bottom: var(--space-2);
+			}
+			.prose :global(h3) {
+				font-size: var(--text-lg);
+				margin-top: var(--space-8);
+				margin-bottom: var(--space-2);
+			}
+			.prose :global(a) {
+				color: var(--accent);
+			}
+			.prose :global(blockquote) {
+				margin: var(--space-6) 0;
+				padding-left: var(--space-4);
+				border-left: 2px solid var(--line);
+				color: var(--muted);
+			}
+			.prose :global(ul),
+			.prose :global(ol) {
+				padding-left: var(--space-6);
+				margin-block: var(--space-4);
+			}
+			.prose :global(li) {
+				margin-block: var(--space-1);
+			}
+			.prose :global(img) {
+				border-radius: var(--radius-md);
+				border: 1px solid var(--line);
+			}
+			@media (max-width: 560px) {
+				.article-wrap {
+					padding-top: var(--space-12);
+				}
+				.post-title {
+					font-size: var(--text-xl);
+				}
 			}
 		</style>
 	</head>
@@ -58,25 +113,24 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	<body>
 		<Header />
 		<main>
-			<article>
+			<article class="article-wrap">
+				<a class="back-link" href="/blog/">&larr; All posts</a>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+					{heroImage && <img width={1020} height={510} src={heroImage.src} alt="" />}
 				</div>
+				<h1 class="post-title">{title}</h1>
+				<p class="date">
+					<FormattedDate date={pubDate} />
+					{
+						updatedDate && (
+							<span class="last-updated-on">
+								{' '}· Last updated on <FormattedDate date={updatedDate} />
+							</span>
+						)
+					}
+				</p>
+				<p class="lede">{description}</p>
 				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
 					<slot />
 				</div>
 			</article>
