@@ -2,9 +2,9 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = 'ahndev';
-export const SITE_DESCRIPTION = 'A developer portfolio and blog by ahndev.';
+export const SITE_DESCRIPTION = 'A developer portfolio and blog by GWA.';
 
-export const CONTACT_EMAIL = 'hello@ahndev.com';
+export const CONTACT_EMAIL = 'gwa@ahndev.com';
 
 export type Project = {
   name: string;
