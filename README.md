@@ -1,63 +1,80 @@
-# Astro Starter Kit: Blog
+# ahndev — personal portfolio & blog
+
+Personal site for [ahndev.com](https://ahndev.com): a static Astro 7 portfolio with a git-based markdown blog. No CMS, no server runtime — content lives in this repo as files.
+
+## Stack
+
+- [Astro 7](https://docs.astro.build) (static output) + MDX, sitemap, RSS
+- Local content collections (glob loader) — previously Strapi CMS, now markdown files in git
+- Modern-minimalist light-only theme, token-driven (`src/styles/global.css`)
+- [Biome](https://biomejs.dev) for lint/format; Node >= 22.12
+- Google Analytics (gtag, in `src/components/BaseHead.astro`)
+
+## Getting started
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+When using the OpenCode agent, start the dev server in background mode: `astro dev --background` (manage with `astro dev stop` / `status` / `logs`).
 
-Features:
+## Writing a post
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+1. Create `src/content/blog/<slug>.md` (or `.mdx`). The filename is the URL slug: `my-post.md` → `/blog/my-post`.
+2. Add frontmatter:
 
-## 🚀 Project Structure
+```yaml
+---
+title: "Post title"
+description: "One-line summary"
+pubDate: 2026-09-16
+updatedDate: 2026-09-16   # optional
+heroImage: "../../assets/cover.webp"   # optional, from src/assets/
+---
+```
 
-Inside of your Astro project, you'll see the following folders and files:
+3. Write markdown. Images referenced from `src/assets/` are auto-optimized by sharp:
+
+```markdown
+![Screenshot of the setup](../../assets/screenshot.png)
+```
+
+Notes:
+
+- Hero and body images go in `src/assets/` (optimized). `public/` is only for verbatim files (`favicon`, `robots.txt`).
+- Future-dated posts (`pubDate > now`) are hidden from the blog index and RSS until their date arrives.
+- Homepage shows the latest 3 posts; the full list is at `/blog`.
+
+## Site data
+
+Site constants (title, description, contact email, projects, social links) live in `src/consts.ts`:
+
+- `PROJECTS: Project[]` — shown on the homepage Projects section (hidden while empty)
+- `SOCIAL_LINKS` — GitHub + email links in the footer
+- `CONTACT_EMAIL` — replace `hello@ahndev.com` with your real address
+
+## Build & SEO
+
+| Command          | Action                                        |
+| :--------------- | :-------------------------------------------- |
+| `npm run build`  | Production build to `./dist/`                 |
+| `npm run preview`| Preview the build locally                     |
+| `npx biome check`| Lint/format check                             |
+
+The build generates `sitemap-index.xml` + `sitemap-0.xml` and `public/robots.txt` points Google at it. RSS feed at `/rss.xml`. If Google Search Console can't discover the sitemap, check that the deployed `robots.txt` actually serves the `Sitemap:` line (Cloudflare may serve its own managed robots.txt) or submit the sitemap manually.
+
+## Structure
 
 ```text
-├── public/
+├── public/            # verbatim static files (favicon, robots.txt)
 ├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+│   ├── assets/        # optimized images (sharp via Astro image())
+│   ├── content/blog/  # blog posts (markdown/MDX, glob collection)
+│   ├── components/    # Header, Footer, BaseHead (meta/OG/analytics)
+│   ├── layouts/       # BlogPost layout
+│   ├── pages/         # /, /about, /blog, /blog/[...slug], rss.xml
+│   ├── styles/        # design tokens (global.css) + reset
+│   └── consts.ts      # site title/description, projects, social links
+└── astro.config.mjs   # site URL, mdx + sitemap integrations
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
